@@ -28,4 +28,6 @@ void mem_r(Widget,void *);
 void mem_c(Widget,void *);
 void d1(Widget,void *);
 void c1(Widget,void *);
+void WindowError(char* error,void *d);
+void retour (Widget w, void* d);
 #endif

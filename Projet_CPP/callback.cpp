@@ -7,6 +7,38 @@
 
 using namespace std;
 
+void retour (Widget w,void* d){
+
+	CloseWindow(); //fonction de la librairie pour fermer la fenetre courante
+
+} 
+void WindowError(char* error,void *d)
+{
+	Widget retour;
+	//char *name=static_cast<char*>(error);
+	MakeWindow(error,SAME_DISPLAY,NONEXCLUSIVE_WINDOW);
+	retour = MakeButton((static_cast<char*>("Retour")),retour,d); 
+	SetWidgetPos(retour,NO_CARE,nullptr,0,NO_CARE);
+	ShowDisplay();
+}
+
+/*Exemple
+void rate(Widget w,void* d)
+{
+	Widget moneyEntry2, Quit1,Save;
+	//MakeWindow(char*,char*,int);
+	char *name=(char*)"Window2";
+	//SAME_DISPLAY affiche sur le même écran la deuxième fenêtre
+	MakeWindow(name,SAME_DISPLAY,NONEXCLUSIVE_WINDOW);
+	
+	moneyEntry2 = MakeStringEntry (NULL,200,NULL,NULL);
+    Quit1 = MakeButton((char*)"Quit", quit1, NULL);  //(char*) convertira le type string en char* attendu par la fonction
+    Save = MakeButton ((char*)"Save",save,NULL);
+    SetWidgetPos(Quit1,PLACE_UNDER,moneyEntry2,0,NO_CARE);
+    SetWidgetPos(Save,PLACE_RIGHT,Quit1,PLACE_UNDER,moneyEntry2);
+    ShowDisplay();
+}
+*/
 /*Fonction screen permettant d'afficher sur l'affichage le nombre saisi au complet
 Elle permet également de créer string donnant la valeur du nombre*/
 void screen(void *d,string id)
@@ -63,6 +95,7 @@ chaque opérateur (plus, moins...) à un numéro (le switch gère des int je cro
 
 void enter(Widget,void *d)
 {
+	char *error;
 	Affichage *result=static_cast<Affichage*>(d);
 
 	result->flag_enter=1;
@@ -79,6 +112,9 @@ void enter(Widget,void *d)
 			control[0]='K';	//Si un des caractères non numérique, alors kill cette ligne avec affichage fenêtre
 		}
 	}
+
+	cout <<"test return"<<endl;
+	 //WindowError(Widget,error,d);
 
 	if(temp!="" and control[0]!='K')
 	{
