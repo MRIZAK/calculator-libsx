@@ -3,6 +3,7 @@
 #include "libsx.h"
 #include <iostream>
 #include <cstring>
+#include <cctype>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ void screen(void *d,string id)
 {
 	Affichage *result=static_cast<Affichage*>(d);
 
-	if(result->flag_enter==1)	// Reset l'affichage si saisie de la touche entrée
+	if(result->flag_enter==1)	// Reset l'affichage si saisie de la touche entrée sinon ajoute la dernière saisie à la chaine
 	{
 		result->set_number("");
 		result->flag_enter=0;
@@ -45,6 +46,14 @@ chaque opérateur (plus, moins...) à un numéro (le switch gère des int je cro
 	}
 	else
 	{
+		string temp=static_cast<string>(GetStringEntry(result->_affichage));
+	
+		if(temp!="")
+		{
+			result->set_arg(stod(temp));
+		}
+		cout << result->get_arg() << endl;
+				cout << result->get_arg() << endl;
 		result->set_operateur(ope);	// met l'opérateur dans la mémoire
 	}
 }
@@ -58,9 +67,20 @@ void enter(Widget,void *d)
 
 	result->flag_enter=1;
 
-	string temp=static_cast<string>(GetStringEntry(result->_affichage));
-	
-	if(temp!="")
+	char* control=GetStringEntry(result->_affichage);
+
+	string temp=static_cast<string>(control);
+
+	for(int i=0;i<sizeof(control);i++)
+	{
+		if(isalpha(control[i])!=0 or isblank(control[i])!=0 or ispunct(control[i])!=0)
+		{
+			cout << control[i] << endl;
+			control[0]='K';	//Si un des caractères non numérique, alors kill cette ligne avec affichage fenêtre
+		}
+	}
+
+	if(temp!="" and control[0]!='K')
 	{
 		result->set_arg(stod(temp));
 	}
