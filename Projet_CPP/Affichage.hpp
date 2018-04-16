@@ -9,10 +9,9 @@ using namespace std;
 class Affichage
 {
 	vector<double> _arg;
-	// double _arg2;
 	double _total;
-	vector<string> _operateur;
-	string _number;	// Stock le nombre pour l'affichage tant qu'il n'y a pas eu de saisie sur un opérateur ou sur entrée
+	string _operateur;
+	string _number;	// Stock le nombre pour l'affichage tant qu'il n'y a pas eu de saisie sur entrée
 
 public:
 	Widget _affichage;
@@ -28,7 +27,6 @@ public:
 	void set_operateur(string op);
 	void set_number(string number);
 	int flag_enter;
-	int flag_op;
 };
 #endif
 

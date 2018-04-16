@@ -12,20 +12,13 @@ void screen(void *d,string id)
 {
 	Affichage *result=static_cast<Affichage*>(d);
 
-	if(result->flag_enter==1)	// Permet de débuter une nouvelle opération après avoir obtenu le résultat de la dernière
+	if(result->flag_enter==1)	// Reset l'affichage si saisie de la touche entrée
 	{
 		result->set_number("");
 		result->flag_enter=0;
-		result->flag_op=0;
-	}
-	if(result->flag_op==1)	// Si screen est appelée par la fonction opération alors on remet l'affichage vide
-	{
-		result->set_number("");
 	}
 	else 
 	{
-		result->flag_op=0; // On enlève le flag opérateur pour permettre la saisie de la suite de l'opération
-
 		result->set_number((result->get_number()+id));
 	}
 
@@ -48,19 +41,11 @@ chaque opérateur (plus, moins...) à un numéro (le switch gère des int je cro
 	if(result->flag_enter==1)	// si le résultat est demandé, effectue les calculs
 	{
 		cout << "Faire le switch avec les calculs" << endl;
+		screen(d,to_string(result->get_total()));
 	}
 	else
 	{
-		if(result->flag_op==0)
-		{
-			result->set_operateur(ope);	// met l'opérateur dans la mémoire
-			result->flag_enter=1;
-		}
-		else
-		{
-			string erase=result->get_operateur();	// Si la dernière saisie est un opérateur, on efface ce dernier de la liste
-			result->set_operateur(ope);	// et on le remplace par le nouvel opérateur
-		}
+		result->set_operateur(ope);	// met l'opérateur dans la mémoire
 	}
 }
 
@@ -70,19 +55,17 @@ chaque opérateur (plus, moins...) à un numéro (le switch gère des int je cro
 void enter(Widget,void *d)
 {
 	Affichage *result=static_cast<Affichage*>(d);
+
 	result->flag_enter=1;
 
-	if(result->get_number()!="")
+	string temp=static_cast<string>(GetStringEntry(result->_affichage));
+	
+	if(temp!="")
 	{
-		operation(d,"result");
-
-		result->set_number(to_string(result->get_total()));
-
-		SetStringEntry(result->_affichage,const_cast<char *>(result->get_number().c_str()));
+		result->set_arg(stod(temp));
 	}
-	else SetStringEntry(result->_affichage,const_cast<char *>(result->get_number().c_str()));
 
-
+	operation(d,"");
 }
 
 /* Le pushback virgule sert à ajouter une virgule à la saisie */
@@ -91,13 +74,12 @@ void virg(Widget,void *d)
 {
 	Affichage *result=static_cast<Affichage*>(d);
 
-	if(result->get_number()!="")
+	string temp=static_cast<string>(GetStringEntry(result->_affichage));	// récupère la valeur affichée
+
+	if(temp!="")	// Si l'affichage actuel n'est pas vide alors on ajoute une virgule, sinon on écrit 0. car chiffre plus petit que 1
 	{
-		result->set_total(stod(result->get_number()));
-
-		result->set_number("");
-
-		SetStringEntry(result->_affichage,const_cast<char *>(result->get_number().c_str()));
+		temp=temp+".";
+		screen(d,".");
 	}
 	else 
 		{
@@ -153,27 +135,27 @@ void zero(Widget,void *d)
 }
 void div(Widget,void *d)
 {
-	operation(d,"div");	
+	operation(d,"/");	
 }
 void mult(Widget,void *d)
 {
-	operation(d,"mult");	
+	operation(d,"*");	
 }
 void pluss(Widget,void *d)
 {
-	operation(d,"plus");
+	operation(d,"+");
 }
 void moins(Widget,void *d)
 {
-	operation(d,"moins");
+	operation(d,"-");
 }
 void percent(Widget,void *d)
 {
-	operation(d,"percent");
+	operation(d,"%");
 }
 void carre(Widget,void *d)
 {
-	operation(d,"carre");
+	operation(d,"²");
 }
 
 

@@ -9,7 +9,6 @@ using namespace std;
 		_number="";
 		_total=0;
 		flag_enter=0;
-		flag_op=0;
 	}
 	
 	double Affichage::get_arg()
@@ -30,11 +29,7 @@ using namespace std;
 	}
 	string Affichage::get_operateur()
 	{
-		string temp=_operateur.back();
-
-		_operateur.pop_back();
-
-		return temp;
+		return _operateur;
 	}
 	void Affichage::set_arg(double i)
 	{
@@ -42,11 +37,11 @@ using namespace std;
 	}
 	void Affichage::set_total(double i)
 	{
-
+		_total=i;
 	}
 	void Affichage::set_operateur(string op)
 	{
-		_operateur.push_back(op);
+		_operateur=op;
 	}
 	void Affichage::set_number(string number)
 	{
