@@ -1,11 +1,34 @@
 #include "callback.hpp"
 #include "Affichage.hpp"
-#include "libsx.h"
-#include <iostream>
-#include <cstring>
-#include <cctype>
+
 
 using namespace std;
+
+
+void retour (Widget w,void* d)
+{
+
+	CloseWindow(); //fonction de la librairie pour fermer la fenetre courante
+
+} 
+void WindowError(char* error,void *d)
+{
+	/*Fonction works mais n'ouvre pas de seconde fenêtre probablement une gestion mémoire à faire */
+
+	/*Pour convertir un string en char sans avoir le Warning "convert string to char* forbids" */
+	string sChaine = "Retour";
+	char * cChaine = new char[sChaine.length()+1]; // or
+
+	Widget Retour;
+	MakeWindow(error,SAME_DISPLAY,NONEXCLUSIVE_WINDOW);
+	cout<<"ok1"<<endl;
+	Retour = MakeButton(strcpy(cChaine, sChaine.c_str()),retour,d); 
+	delete [] cChaine;
+	SetWidgetPos(Retour,NO_CARE,nullptr,0,NO_CARE);
+	cout<<"ok2"<<endl;
+	ShowDisplay();
+	cout<<"ok3"<<endl;
+}
 
 /*Fonction screen permettant d'afficher sur l'affichage le nombre saisi au complet
 Elle permet également de créer string donnant la valeur du nombre*/
@@ -48,6 +71,9 @@ chaque opérateur (plus, moins...) à un numéro (le switch gère des int je cro
 	{
 		result->set_operateur(ope);	// met l'opérateur dans la mémoire
 	}
+	/*Ajout d'un erreur pour supprimer le warning qui indique qu'il attend un type de retour puisque la fonction est censée retourner un double
+	Maurane*/
+	return 0;
 }
 
 
@@ -62,13 +88,24 @@ void enter(Widget,void *d)
 	char* control=GetStringEntry(result->_affichage);
 
 	string temp=static_cast<string>(control);
+	char* Error=nullptr;
 
-	for(int i=0;i<sizeof(control);i++)
+	/*Déclaré en unsigned car "sizeof" prend en compte des entiers non signés, cela supprime un Warning 
+	Maurane*/
+	for(unsigned int i=0;i<sizeof(control);i++)
 	{
 		if(isalpha(control[i])!=0 or isblank(control[i])!=0 or ispunct(control[i])!=0)
 		{
+			
 			cout << control[i] << endl;
 			control[0]='K';	//Si un des caractères non numérique, alors kill cette ligne avec affichage fenêtre
+			/*Appel de la fonction WindowError à implémenter car non réussi*/
+			/* Quand on supprime la ligne control[0]='K'; ,
+			on rentre dans la fonction WindowError quand une chaine de 
+			caractères est entrée au clavier mais on a un "core dump" et la fenetre d'erreur ne s'ouvre pas
+			si on laisse la ligne control[0]='K'; on entre dans la fonction d'erreur à chaque fois
+			à débeuguer */
+			WindowError(Error,d);
 		}
 	}
 

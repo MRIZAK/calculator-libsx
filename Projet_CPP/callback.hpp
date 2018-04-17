@@ -2,6 +2,9 @@
 #define callback_HPP
 #include <iostream>
 #include "libsx.h"
+#include <cstring>
+#include <cctype>
+#include <string>
 
 using namespace std;
 
@@ -28,4 +31,6 @@ void mem_r(Widget,void *);
 void mem_c(Widget,void *);
 void d1(Widget,void *);
 void c1(Widget,void *);
+void retour (Widget w,void* d);
+void WindowError(char* error,void *d);
 #endif
