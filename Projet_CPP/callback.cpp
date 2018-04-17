@@ -46,14 +46,6 @@ chaque opérateur (plus, moins...) à un numéro (le switch gère des int je cro
 	}
 	else
 	{
-		string temp=static_cast<string>(GetStringEntry(result->_affichage));
-	
-		if(temp!="")
-		{
-			result->set_arg(stod(temp));
-		}
-		cout << result->get_arg() << endl;
-				cout << result->get_arg() << endl;
 		result->set_operateur(ope);	// met l'opérateur dans la mémoire
 	}
 }

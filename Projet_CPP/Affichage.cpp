@@ -13,11 +13,7 @@ using namespace std;
 	
 	double Affichage::get_arg()
 	{
-		double temp=_arg.back();
-
-		_arg.pop_back();
-
-		return temp;
+		return _arg.get_argPile();
 	}
 	double Affichage::get_total()
 	{
@@ -33,7 +29,7 @@ using namespace std;
 	}
 	void Affichage::set_arg(double i)
 	{
-		_arg.push_back(i);
+		_arg.set_argPile(i);
 	}
 	void Affichage::set_total(double i)
 	{
