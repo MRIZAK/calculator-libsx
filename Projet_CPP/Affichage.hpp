@@ -21,6 +21,8 @@ public:
 	double get_total();
 	string get_number();
 	string get_operateur();
+	int get_priority(string op);
+	
 	void set_arg(double i);
 	void set_total(double i);
 	void set_operateur(string op);

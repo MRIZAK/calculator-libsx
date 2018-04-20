@@ -5,6 +5,8 @@
 #include <cstring>
 #include <cctype>
 #include <string>
+#include <cmath>
+#include "Pile.hpp"
 
 using namespace std;
 
@@ -33,4 +35,14 @@ void d1(Widget,void *);
 void c1(Widget,void *);
 void retour (Widget w,void* d);
 void WindowError(char* error,void *d);
+bool isNumber(string  number, unsigned int i);
+bool isOperand(string number,unsigned int i);
+void specialOperator(string& ope, unsigned int pos);
+int operationCarre (string&  ope, unsigned int *i, unsigned int *lastSeparatorPos,string& digits);
+bool comparePriority(Pile tmpPile, string& ope, unsigned int pos);
+double operateurTranslator (char operateur);
+char operateurTranslatorInverted (double operateur);
+int get_priority (double operateur);
+Pile fillStack(string& ope);
+Pile resultStacks (Pile filledStack, string& ope);
 #endif

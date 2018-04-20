@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 
+
 using namespace std;
 
 	Affichage::Affichage()
@@ -27,6 +28,11 @@ using namespace std;
 	{
 		return _operateur;
 	}
+	int get_priority(string op)
+	{
+
+	}
+	
 	void Affichage::set_arg(double i)
 	{
 		_arg.set_argPile(i);
