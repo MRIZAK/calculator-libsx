@@ -25,15 +25,16 @@ void init_display(int argc, char **argv, void *d)
 	MR: Affiche le contenu de la mémoire
 	MC: Efface la mémoire
 	Enter: Validation de la saisie (affichage du résultat total)
-	D1: Supprime la dernière instruction saisie ?
-	C1:Racine carré de la valeur saisie
-	%: Divise par 100 la valeur donnée
+	D1: Supprime la dernière instruction saisie
+	C1: Supprime l'ensemble des saisies
+	%: Donne un pourcentage en fonction de la saisie précédente
 
 */
 
 ///////Association des Widgets avec les callbacks///////
 
-	result->_affichage=MakeStringEntry(nullptr,500,nullptr,nullptr);
+	result->_affichage=MakeStringEntry(nullptr,240,nullptr,nullptr);
+	result->_last=MakeTextWidget(nullptr,false,false,100,50);
 
 	wneuf=MakeButton(const_cast<char*>("9"),neuf,d);
 	whuit=MakeButton(const_cast<char*>("8"),huit,d);
@@ -57,7 +58,7 @@ void init_display(int argc, char **argv, void *d)
 	wmem_plus=MakeButton(const_cast<char*>("M+"),mem_plus,d);
 	wmem_r=MakeButton(const_cast<char*>("MR"),mem_r,d);
 	wmem_c=MakeButton(const_cast<char*>("MC"),mem_c,d);
-	wd1=MakeButton(const_cast<char*>("D1"),d1,d);
+	wd1=MakeButton(const_cast<char*>("Dl"),d1,d);
 	wc1=MakeButton(const_cast<char*>("C1"),c1,d);
 
 ///////Mise en place des Widgets///////
@@ -69,6 +70,7 @@ void init_display(int argc, char **argv, void *d)
 	SetWidgetPos(wd1,PLACE_RIGHT,wdiv,PLACE_UNDER,result->_affichage);
 	SetWidgetPos(wmem_plus,PLACE_RIGHT,wd1,PLACE_UNDER,result->_affichage);
 
+	SetWidgetPos(result->_last,PLACE_RIGHT,wmem_plus,PLACE_UNDER,result->_affichage);
 
 	/* Deuxième ligne */	
 	SetWidgetPos(wquatre,NO_CARE,nullptr,PLACE_UNDER,wsept);

@@ -15,9 +15,7 @@ using namespace std;
 			return temp;
 		}
 
-		/*Ajout d'une erreur pour supprimer le warning qui indique qu'il attend un type de retour puisque la fonction est censée retourner un double
-		Maurane*/
-			// return 0;
+		return 0;
 		
 	}
 	void Pile::set_argPile(double i)

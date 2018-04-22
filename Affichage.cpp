@@ -9,6 +9,8 @@ using namespace std;
 		_number="";
 		_total=0;
 		flag_enter=0;
+		flag_err=0;
+		flag_ope=0;
 	}
 	
 	double Affichage::get_arg()
@@ -52,4 +54,25 @@ using namespace std;
 	int Affichage::sizeArg()
 	{
 		return _arg.sizePile();
+	}
+	string Affichage::get_memory()
+	{
+		return _memory;
+	}
+	void Affichage::set_memory(string memory)
+	{
+		_memory=memory;
+	}
+	void Affichage::reset_memory()
+	{
+		_memory="";
+	}
+
+	void Affichage::set_rappel(string last)
+	{
+		_rappel=last;
+	}
+	string Affichage::get_rappel()
+	{
+		return _rappel;
 	}
