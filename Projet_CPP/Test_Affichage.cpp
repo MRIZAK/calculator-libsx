@@ -1,8 +1,7 @@
-#define CATCH_CONFIG_MAIN
-#include "catch.hpp"
 #include <iostream>
 #include "Catch.hpp"
 #include "Affichage.hpp"
+#include "callback.cpp"
 
 using namespace std;
 
@@ -25,11 +24,11 @@ TEST_CASE("Test calcul simple")
 Affichage resultat;
 
 //On teste un calcul normal + prise en compte des priorités
- resultat.set_number("5");
- resultat.set_number("3");
- resultat.set_number("4");
- resultat.set_operateur("*");
- resultat.set_operateur("+");
+ resultat.set_arg(5);
+ resultat.set_arg(3);
+ resultat.set_arg(4);
+ operation(&resultat,"*");
+ operation(&resultat,"+");
 
  CHECK(resultat.get_total()==17); //5+3*4
  CHECK(resultat.get_total()==32); //(5+3)*4
@@ -38,78 +37,79 @@ Affichage resultat;
 TEST_CASE("Test calcul avec 4 opérateurs")
 {
 Affichage resultat;
-
-resultat.set_number("5");
-resultat.set_number("3");
-resultat.set_number("2");
-resultat.set_number("5");
-resultat.set_number("4");
-resultat.set_operateur("-");
-resultat.set_operateur("+");
-resultat.set_operateur("/");
-resultat.set_operateur("*");
-CHECK(resultat.get_total()==8);
+resultat.set_arg(5.5);
+resultat.set_arg(3);
+resultat.set_arg(2);
+resultat.set_arg(5);
+resultat.set_arg(4);
+operation(&resultat,"-");
+operation(&resultat,"+");
+operation(&resultat,"/");
+operation(&resultat,"*");
+CHECK(resultat.get_total()==7.5);
 }
 
 TEST_CASE("Test division par 0")
  {
  Affichage resultat;
 
- resultat.set_number("3");
- resultat.set_number("0");
- resultat.set_operateur("/");
+ resultat.set_arg(3);
+ resultat.set_arg(0);
+ operation(&resultat,"/");
 
  CHECK(resultat.get_total()==0);
- CHECK(resultat.get_total()=="ERROR");
+ CHECK(resultat.flag_err==1);
+
  }
 
 //On teste autre chose qu'un nombre qui rentre dans la pile de calcul
-TEST_CASE("Test caractère dans la pile")
- {
- Affichage resultat;
- resultat.set_number("Poule d'eau");
- resultat.set_operateur("Poule d'eau");
- CHECK(resultat.get_total()=="ERROR");
- }
+//TEST_CASE("Test caractère dans la pile")
+ //{
+ //Affichage resultat;
+ //resultat.set_arg("Poule d'eau");
+ //resultat.set_arg(3);
+ //operation(&resultat,"+");
+ //CHECK(resultat.flag_err==1);
+ //}
 
 TEST_CASE("Test trop d'opérateur")
  {
  Affichage resultat;
- resultat.set_number("5");
- resultat.set_number("3");
- resultat.set_number("4");
- resultat.set_operateur("*");
- resultat.set_operateur("+");
- resultat.set_operateur("-");
- CHECK(resultat.get_total()=="ERROR"); // S'il ne fait pas le calcul
+ resultat.set_arg(5);
+ resultat.set_arg(3);
+ resultat.set_arg(4);
+ operation(&resultat,"*");
+ operation(&resultat,"+");
+ operation(&resultat,"-");
+ CHECK(resultat.flag_err==1); // S'il ne fait pas le calcul
  CHECK(resultat.get_total()==4); // Il retourne 3-4+5
  }
 
 TEST_CASE("Test pas assez d'opérateur")
  {
   Affichage resultat;
-  resultat.set_number("5");
-  resultat.set_number("3");
-  resultat.set_number("4");
-  resultat.set_operateur("*");
-  CHECK(resultat.get_total()=="ERROR Chaine"); //Ca renvoi rien
+  resultat.set_arg(5);
+  resultat.set_arg(3);
+  resultat.set_arg(4);
+  operation(&resultat,"*");
+  CHECK(resultat.flag_err==1); //Ca renvoi rien
   CHECK(resultat.get_total()==12); // Ca renvoi 3*4
  }
 
 TEST_CASE("Test du pourcentage")
  {
   Affichage resultat;
-  resultat.set_number("5");
-  resultat.set_number("10");
-  resultat.set_operateur("*");
-  resultat.set_operateur("%");
+  resultat.set_arg(5);
+  resultat.set_arg(10);
+  operation(&resultat,"*");
+  operation(&resultat,"%");
   CHECK(resultat.get_total()==0.50);
 }
 
 TEST_CASE("Test du carré")
  {
   Affichage resultat;
-  resultat.set_number("5");
-  resultat.set_operateur("²");
+  resultat.set_arg(5);
+  operation(&resultat,"²");
   CHECK(resultat.get_total()==25);
 }
