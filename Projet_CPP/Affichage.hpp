@@ -25,7 +25,10 @@ public:
 	void set_total(double i);
 	void set_operateur(string op);
 	void set_number(string number);
+	bool empty();
+	int sizeArg();
 	int flag_enter;
+	int flag_err;
 };
 #endif
 

@@ -9,6 +9,7 @@ using namespace std;
 		_number="";
 		_total=0;
 		flag_enter=0;
+		flag_err=0;
 	}
 	
 	double Affichage::get_arg()
@@ -42,4 +43,14 @@ using namespace std;
 	void Affichage::set_number(string number)
 	{
 		_number=number;
+	}
+
+	bool Affichage::empty()
+	{
+		return _arg.empty();
+	}
+
+	int Affichage::sizeArg()
+	{
+		return _arg.sizePile();
 	}

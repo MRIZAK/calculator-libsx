@@ -30,10 +30,11 @@ void screen(void *d,string id)
 {
 	Affichage *result=static_cast<Affichage*>(d);
 
-	if(result->flag_enter==1)	// Reset l'affichage si saisie de la touche entrée sinon ajoute la dernière saisie à la chaine
+	if(result->flag_enter==1 or result->flag_err==1)	// Reset l'affichage si saisie de la touche entrée sinon ajoute la dernière saisie à la chaine
 	{
-		result->set_number("");
+		result->set_number(id);
 		result->flag_enter=0;
+		result->flag_err=0;
 	}
 	else 
 	{
@@ -50,7 +51,6 @@ void operation(void *d,string ope)
 	double arg1=0,arg2=0;
 
 	map<string,int> operateur;
-	operateur[""]=0;
 	operateur["/"]=1;
 	operateur["*"]=2;
 	operateur["+"]=3;
@@ -58,42 +58,93 @@ void operation(void *d,string ope)
 	operateur["%"]=5;
 	operateur["²"]=6;
 
+	if(result->empty()==false)
+	{
+		switch(operateur[ope])
+			{
+				case 1:	if(result->sizeArg()>1)
+						{
+							arg1=result->get_arg();
+							arg2=result->get_arg();
+							result->set_arg(arg2/arg1);
+							result->set_total(arg2/arg1);
+							break;
+						}
+						else 
+							{
+								WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+								result->flag_err=1;
+								return;
+							}
 
-	switch(operateur[ope])
-		{
-			case 0: return;
-			case 1:	arg1=result->get_arg();
-					arg2=result->get_arg();
-					result->set_arg(arg2/arg1);
-					result->set_total(arg2/arg1);
-					break;
-			case 2:	arg1=result->get_arg()*result->get_arg();
-					result->set_arg(arg1);
-					result->set_total(arg2*arg1);
-					break;
-			case 3:	arg1=result->get_arg();
-					arg2=result->get_arg();
-					result->set_arg(arg2+arg1);
-					result->set_total(arg2+arg1);
-					break;
-			case 4:	arg1=result->get_arg();
-					arg2=result->get_arg();
-					result->set_arg(arg2-arg1);
-					result->set_total(arg2-arg1);
-					break;
-			case 5:	arg1=result->get_arg();
-					arg2=result->get_arg();
-					cout << "on fait le pourcentage" << endl;
-					break;
-			case 6:	arg1=result->get_arg();
-					arg1*=arg1;
-					result->set_total(arg1);
-					break;
-		}
-
+				case 2:	if(result->sizeArg()>1)
+						{
+							arg1=result->get_arg()*result->get_arg();
+							result->set_arg(arg1);
+							result->set_total(arg2*arg1);
+							break;
+						}
+						else 
+							{
+								WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+								result->flag_err=1;
+								return;
+							}
+				case 3:	if(result->sizeArg()>1)
+						{
+							arg1=result->get_arg();
+							arg2=result->get_arg();
+							result->set_arg(arg2+arg1);
+							result->set_total(arg2+arg1);
+							break;
+						}
+						else 
+							{
+								WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+								result->flag_err=1;
+								return;
+							}
+				case 4:	if(result->sizeArg()>1)
+						{
+							arg1=result->get_arg();
+							arg2=result->get_arg();
+							result->set_arg(arg2-arg1);
+							result->set_total(arg2-arg1);
+							break;
+						}
+						else 
+							{
+								WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+								result->flag_err=1;
+								return;
+							}
+				case 5:	if(result->sizeArg()>1)
+						{
+							arg1=result->get_arg();
+							arg2=result->get_arg();
+							result->set_arg(arg2);
+							result->set_arg((arg1*100)/arg2);
+							result->set_total((arg1*100)/arg2);
+							break;
+						}
+						else 
+						{
+							WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+							result->flag_err=1;
+							return;
+						}
+				case 6:	arg1=result->get_arg();
+						arg1*=arg1;
+						result->set_arg(arg1);
+						result->set_total(arg1);
+						break;
+				default: 	WindowError("Erreur inattendue lors de la saisie de l'operateur...nous sommes desoles!",d);
+							return;
+			}
+	result->flag_enter=1;
 	screen(d,to_string(result->get_total()));
-	cout << result->get_total() << endl;
-
+	}
+	else WindowError("Pas d'operande en memoire! Operation annulee",d);
 }
 
 
@@ -115,22 +166,19 @@ void enter(Widget,void *d)
 		WindowError("Saisie incomplete",d);
 		return;
 	}
-	for(unsigned int i=0;i<sizeof(control);i++)
+	for(unsigned int i=0;i<temp.length();i++)
 	{
 		if(isalpha(control[i])!=0 or isblank(control[i])!=0 or ispunct(control[i])!=0) // on controle si les caractères saisies sont bien numériques
 		{
 			/*Gestion de l'exception - qui fait partie de ispunct*/
 
-
 			if(control[i]=='-' and &control[i]==&control[0])
 			{
-				cout << "premier -" << endl;
 				continue;
 			}
 
 			if(control[i]=='-' and &control[i]!=&control[0])
 			{
-				cout << "deuxieme -" << endl;
 				WindowError("Erreur, plusieurs moins dans votre saisie ou ce dernier est mal place",d);
 				return;
 			}
@@ -165,10 +213,7 @@ void enter(Widget,void *d)
 	if(control[0]!='K')
 	{
 		result->set_arg(stod(temp));
-		operation(d,"");
 	}
-
-	cout << temp << endl;
 }
 
 /* Le pushback virgule sert à ajouter une virgule à la saisie */

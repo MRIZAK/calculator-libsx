@@ -15,8 +15,6 @@ using namespace std;
 			return temp;
 		}
 
-	/*Ajout d'une erreur pour supprimer le warning qui indique qu'il attend un type de retour puisque la fonction est censée retourner un double
-	Maurane*/
 		return 0;
 		
 	}
@@ -28,4 +26,9 @@ using namespace std;
 	bool Pile::empty()
 	{
 		return _argPile.empty();
+	}
+
+	int Pile::sizePile()
+	{
+		return _argPile.size();
 	}
