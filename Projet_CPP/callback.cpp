@@ -29,6 +29,14 @@ Elle permet également de créer string donnant la valeur du nombre*/
 void screen(void *d,string id)
 {
 	Affichage *result=static_cast<Affichage*>(d);
+	
+	if(result->flag_ope==1)
+	{
+		result->set_number(id);
+		result->flag_ope=0;
+		SetStringEntry(result->_affichage,const_cast<char *>(result->get_number().c_str()));
+		return;
+	}
 
 	if(result->flag_enter==1 or result->flag_err==1)	// Reset l'affichage si saisie de la touche entrée sinon ajoute la dernière saisie à la chaine
 	{
@@ -85,8 +93,9 @@ void operation(void *d,string ope)
 
 				case 2:	if(result->sizeArg()>1)
 						{
-							arg1=result->get_arg()*result->get_arg();
-							result->set_arg(arg1);
+							arg1=result->get_arg();
+							arg2=result->get_arg();
+							result->set_arg(arg1*arg2);
 							result->set_total(arg2*arg1);
 							break;
 						}
@@ -147,7 +156,7 @@ void operation(void *d,string ope)
 				default: 	WindowError("Erreur inattendue lors de la saisie de l'operateur...nous sommes desoles!",d);
 							return;
 			}
-	result->flag_enter=1;
+	result->flag_ope=1;
 	screen(d,to_string(result->get_total()));
 	}
 	else WindowError("Pas d'operande en memoire! Operation annulee",d);
@@ -309,14 +318,11 @@ void moins(Widget,void *d)
 	string buf= result->get_number();
 	if(buf[0]!='\0' and result->sizeArg()>1)
 	{
-		cout << "operation " << buf <<endl;
 		operation(d,"-");
 	}
 	else
 	{
-		cout << "operateur - " << buf<< endl;
-		screen(d,"-");
-		
+		screen(d,"-");	
 	}
 	
 }

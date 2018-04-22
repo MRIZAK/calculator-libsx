@@ -35,6 +35,7 @@ public:
 
 	int flag_enter;
 	int flag_err;
+	int flag_ope;
 };
 #endif
 

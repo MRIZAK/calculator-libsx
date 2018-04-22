@@ -10,6 +10,7 @@ using namespace std;
 		_total=0;
 		flag_enter=0;
 		flag_err=0;
+		flag_ope=0;
 	}
 	
 	double Affichage::get_arg()
