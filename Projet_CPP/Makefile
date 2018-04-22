@@ -27,7 +27,7 @@ Test_Affichage.o: Test_Affichage.cpp Catch.hpp
 Test_Pile.o:Test_Pile.cpp Catch.hpp
 
 cleaner: clean
-	rm -f main
+	rm -f main-calc
 	rm -f test-calc
 
 clean:

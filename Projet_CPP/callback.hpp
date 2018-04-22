@@ -32,5 +32,5 @@ void mem_c(Widget,void *);
 void d1(Widget,void *);
 void c1(Widget,void *);
 void retour (Widget w,void* d);
-void WindowError(char* error,void *d);
+void WindowError(string error,void *d);
 #endif

@@ -1,5 +1,6 @@
 #include "callback.hpp"
 #include "Affichage.hpp"
+#include <map>
 
 
 using namespace std;
@@ -11,23 +12,16 @@ void retour (Widget w,void* d)
 	CloseWindow(); //fonction de la librairie pour fermer la fenetre courante
 
 } 
-void WindowError(char* error,void *d)
+
+// Fonction erreur à appeler à chaque fausse manipulation (ou sur des erreurs non prévues via try/catch) la fonction prend en paramètre le nom de l'erreur générée
+void WindowError(string error,void *d)
 {
-	/*Fonction works mais n'ouvre pas de seconde fenêtre probablement une gestion mémoire à faire */
-
-	/*Pour convertir un string en char sans avoir le Warning "convert string to char* forbids" */
-	string sChaine = "Retour";
-	char * cChaine = new char[sChaine.length()+1]; // or
-
 	Widget Retour;
-	MakeWindow(error,SAME_DISPLAY,NONEXCLUSIVE_WINDOW);
-	cout<<"ok1"<<endl;
-	Retour = MakeButton(strcpy(cChaine, sChaine.c_str()),retour,d); 
-	delete [] cChaine;
+	string title = "Erreur";
+	MakeWindow(const_cast<char*>(title.c_str()),SAME_DISPLAY,EXCLUSIVE_WINDOW);
+	Retour = MakeButton(const_cast<char*>(error.c_str()),retour,d); 
 	SetWidgetPos(Retour,NO_CARE,nullptr,0,NO_CARE);
-	cout<<"ok2"<<endl;
 	ShowDisplay();
-	cout<<"ok3"<<endl;
 }
 
 /*Fonction screen permettant d'afficher sur l'affichage le nombre saisi au complet
@@ -49,31 +43,57 @@ void screen(void *d,string id)
 	SetStringEntry(result->_affichage,const_cast<char *>(result->get_number().c_str()));
 }
 
-double operation(void *d,string ope)
+void operation(void *d,string ope)
 {
-	/*
-Il faut réaliser un switch case qui effectue l'opération indiquée
-en paramètre de fonction.
-Cette fonction est appelée par les différents callbacks
-
-Afin de faciliter la lecture on peut utiliser une map pour faire correspondre
-chaque opérateur (plus, moins...) à un numéro (le switch gère des int je crois)
-	*/
-
 	Affichage *result=static_cast<Affichage*>(d);
 
-	if(result->flag_enter==1)	// si le résultat est demandé, effectue les calculs
-	{
-		cout << "Faire le switch avec les calculs" << endl;
-		screen(d,to_string(result->get_total()));
-	}
-	else
-	{
-		result->set_operateur(ope);	// met l'opérateur dans la mémoire
-	}
-	/*Ajout d'un erreur pour supprimer le warning qui indique qu'il attend un type de retour puisque la fonction est censée retourner un double
-	Maurane*/
-	return 0;
+	double arg1=0,arg2=0;
+
+	map<string,int> operateur;
+	operateur[""]=0;
+	operateur["/"]=1;
+	operateur["*"]=2;
+	operateur["+"]=3;
+	operateur["-"]=4;
+	operateur["%"]=5;
+	operateur["²"]=6;
+
+
+	switch(operateur[ope])
+		{
+			case 0: return;
+			case 1:	arg1=result->get_arg();
+					arg2=result->get_arg();
+					result->set_arg(arg2/arg1);
+					result->set_total(arg2/arg1);
+					break;
+			case 2:	arg1=result->get_arg()*result->get_arg();
+					result->set_arg(arg1);
+					result->set_total(arg2*arg1);
+					break;
+			case 3:	arg1=result->get_arg();
+					arg2=result->get_arg();
+					result->set_arg(arg2+arg1);
+					result->set_total(arg2+arg1);
+					break;
+			case 4:	arg1=result->get_arg();
+					arg2=result->get_arg();
+					result->set_arg(arg2-arg1);
+					result->set_total(arg2-arg1);
+					break;
+			case 5:	arg1=result->get_arg();
+					arg2=result->get_arg();
+					cout << "on fait le pourcentage" << endl;
+					break;
+			case 6:	arg1=result->get_arg();
+					arg1*=arg1;
+					result->set_total(arg1);
+					break;
+		}
+
+	screen(d,to_string(result->get_total()));
+	cout << result->get_total() << endl;
+
 }
 
 
@@ -84,37 +104,71 @@ void enter(Widget,void *d)
 	Affichage *result=static_cast<Affichage*>(d);
 
 	result->flag_enter=1;
+	int flag_virg=0;
 
 	char* control=GetStringEntry(result->_affichage);
 
 	string temp=static_cast<string>(control);
-	char* Error=nullptr;
 
-	/*Déclaré en unsigned car "sizeof" prend en compte des entiers non signés, cela supprime un Warning 
-	Maurane*/
+	if(temp=="-" or temp==".")	// Si la saisie ne comporte qu'un - ou qu'une virgule, saisie incomplète!
+	{
+		WindowError("Saisie incomplete",d);
+		return;
+	}
 	for(unsigned int i=0;i<sizeof(control);i++)
 	{
-		if(isalpha(control[i])!=0 or isblank(control[i])!=0 or ispunct(control[i])!=0)
+		if(isalpha(control[i])!=0 or isblank(control[i])!=0 or ispunct(control[i])!=0) // on controle si les caractères saisies sont bien numériques
 		{
-			
-			cout << control[i] << endl;
-			control[0]='K';	//Si un des caractères non numérique, alors kill cette ligne avec affichage fenêtre
-			/*Appel de la fonction WindowError à implémenter car non réussi*/
-			/* Quand on supprime la ligne control[0]='K'; ,
-			on rentre dans la fonction WindowError quand une chaine de 
-			caractères est entrée au clavier mais on a un "core dump" et la fenetre d'erreur ne s'ouvre pas
-			si on laisse la ligne control[0]='K'; on entre dans la fonction d'erreur à chaque fois
-			à débeuguer */
-			WindowError(Error,d);
+			/*Gestion de l'exception - qui fait partie de ispunct*/
+
+
+			if(control[i]=='-' and &control[i]==&control[0])
+			{
+				cout << "premier -" << endl;
+				continue;
+			}
+
+			if(control[i]=='-' and &control[i]!=&control[0])
+			{
+				cout << "deuxieme -" << endl;
+				WindowError("Erreur, plusieurs moins dans votre saisie ou ce dernier est mal place",d);
+				return;
+			}
+
+			/*Gestion de l'exception . qui fait partie de ispunct*/
+
+			if(control[i]=='.')
+			{
+
+				if(control[i]=='.')
+				{
+					flag_virg++;
+				}
+				if(flag_virg>1)
+				{
+					WindowError("Erreur, plusieurs virgules dans votre saisie",d);
+					return;
+				}
+				else continue;
+			}
+
+			if(temp=="")
+			{
+				WindowError("Saisie incomplete",d);
+				return;
+			}
+			control[0]='K';		//Si un des caractères n'est pas numérique, alors kill cette ligne avec affichage fenêtre d'erreur
+			WindowError("Merci de ne pas saisir de caracteres non numerique",d);
+			break;	
 		}
 	}
-
-	if(temp!="" and control[0]!='K')
+	if(control[0]!='K')
 	{
 		result->set_arg(stod(temp));
+		operation(d,"");
 	}
 
-	operation(d,"");
+	cout << temp << endl;
 }
 
 /* Le pushback virgule sert à ajouter une virgule à la saisie */
