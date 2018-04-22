@@ -249,9 +249,20 @@ void mem_c(Widget,void *d)
 }
 void d1(Widget,void *d)
 {
-
+	Affichage *result=static_cast<Affichage*>(d);
+	string buf= result->get_number();
+	if(buf!="")
+	{
+		buf.pop_back();
+	}
+	
+	result->set_number(buf);
+	screen(d,"");
 }
 void c1(Widget,void *d)
 {
-	
+	Affichage *result=static_cast<Affichage*>(d);
+	result->set_number("");
+	result->set_operateur("");
+	screen(d,"");
 }
