@@ -19,6 +19,6 @@ TEST_CASE( "Test_Classe_Pile", "Test_Classe_Pile" )
 	CHECK(test.get_argPile()==2);
 	CHECK(test.get_argPile()==1);
 	CHECK(test.empty()==true);
-	CHECK(test.get_argPile()==1);
+	CHECK(test.sizePile()==0);
 }
 #endif
