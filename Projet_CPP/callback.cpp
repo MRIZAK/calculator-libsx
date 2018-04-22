@@ -85,8 +85,9 @@ void operation(void *d,string ope)
 
 				case 2:	if(result->sizeArg()>1)
 						{
-							arg1=result->get_arg()*result->get_arg();
-							result->set_arg(arg1);
+							arg1=result->get_arg();
+							arg2=result->get_arg();
+							result->set_arg(arg1*arg2);
 							result->set_total(arg2*arg1);
 							break;
 						}
