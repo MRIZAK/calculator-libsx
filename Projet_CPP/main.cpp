@@ -33,7 +33,7 @@ void init_display(int argc, char **argv, void *d)
 
 ///////Association des Widgets avec les callbacks///////
 
-	result->_affichage=MakeStringEntry(nullptr,500,nullptr,nullptr);
+	result->_affichage=MakeStringEntry(nullptr,135,nullptr,nullptr);
 
 	wneuf=MakeButton(const_cast<char*>("9"),neuf,d);
 	whuit=MakeButton(const_cast<char*>("8"),huit,d);
