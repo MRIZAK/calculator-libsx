@@ -66,3 +66,7 @@ using namespace std;
 	{
 		_memory="";
 	}
+	void Affichage::reset_pile()
+	{
+		_arg.emptyPile();
+	}

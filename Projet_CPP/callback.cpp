@@ -85,9 +85,8 @@ void operation(void *d,string ope)
 
 				case 2:	if(result->sizeArg()>1)
 						{
-							arg1=result->get_arg();
-							arg2=result->get_arg();
-							result->set_arg(arg1*arg2);
+							arg1=result->get_arg()*result->get_arg();
+							result->set_arg(arg1);
 							result->set_total(arg2*arg1);
 							break;
 						}
@@ -177,8 +176,9 @@ void enter(Widget,void *d)
 	{
 		if(isalpha(control[i])!=0 or isblank(control[i])!=0 or ispunct(control[i])!=0) // on controle si les caractères saisies sont bien numériques
 		{
+			
 			/*Gestion de l'exception - qui fait partie de ispunct*/
-
+		
 			if(control[i]=='-' and &control[i]==&control[0])
 			{
 				continue;
@@ -221,6 +221,8 @@ void enter(Widget,void *d)
 	{
 		result->set_arg(stod(temp));
 	}
+	
+
 }
 
 /* Le pushback virgule sert à ajouter une virgule à la saisie */
@@ -302,7 +304,21 @@ void pluss(Widget,void *d)
 }
 void moins(Widget,void *d)
 {
-	operation(d,"-");
+	//stactic int counter=0;
+	Affichage *result=static_cast<Affichage*>(d);
+	string buf= result->get_number();
+	if(buf[0]!='\0' and result->sizeArg()>1)
+	{
+		cout << "operation " << buf <<endl;
+		operation(d,"-");
+	}
+	else
+	{
+		cout << "operateur - " << buf<< endl;
+		screen(d,"-");
+		
+	}
+	
 }
 void percent(Widget,void *d)
 {
@@ -367,5 +383,6 @@ void c1(Widget,void *d)
 	Affichage *result=static_cast<Affichage*>(d);
 	result->set_number("");
 	result->set_operateur("");
+	result->reset_pile();
 	screen(d,"");
 }

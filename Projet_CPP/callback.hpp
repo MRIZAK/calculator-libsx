@@ -33,6 +33,4 @@ void d1(Widget,void *);
 void c1(Widget,void *);
 void retour (Widget w,void* d);
 void WindowError(string error,void *d);
-void operation(void *d,string ope);
-void screen(void *d,string id);
 #endif

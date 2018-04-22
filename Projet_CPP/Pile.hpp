@@ -15,5 +15,6 @@ public:
 	void set_argPile(double i);
 	bool empty();
 	int sizePile();
+	void emptyPile();
 };
 #endif

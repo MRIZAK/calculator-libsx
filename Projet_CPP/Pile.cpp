@@ -32,3 +32,12 @@ using namespace std;
 	{
 		return _argPile.size();
 	}
+
+	void Pile::emptyPile()
+	{
+		
+		while(!this->empty())
+		{
+			this->get_argPile();
+		}
+	}

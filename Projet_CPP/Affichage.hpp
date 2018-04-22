@@ -31,6 +31,7 @@ public:
 	string get_memory();
 	void set_memory(string memory);
 	void reset_memory();
+	void reset_pile();
 
 	int flag_enter;
 	int flag_err;
