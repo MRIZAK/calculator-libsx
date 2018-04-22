@@ -54,3 +54,15 @@ using namespace std;
 	{
 		return _arg.sizePile();
 	}
+	string Affichage::get_memory()
+	{
+		return _memory;
+	}
+	void Affichage::set_memory(string memory)
+	{
+		_memory=memory;
+	}
+	void Affichage::reset_memory()
+	{
+		_memory="";
+	}
