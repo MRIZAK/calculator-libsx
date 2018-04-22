@@ -65,6 +65,12 @@ void operation(void *d,string ope)
 				case 1:	if(result->sizeArg()>1)
 						{
 							arg1=result->get_arg();
+							if(arg1==0)
+							{
+								WindowError("Erreur, Division par 0 non autorisee",d);
+								result->flag_err=1;
+								return;
+							}
 							arg2=result->get_arg();
 							result->set_arg(arg2/arg1);
 							result->set_total(arg2/arg1);
@@ -311,21 +317,54 @@ void carre(Widget,void *d)
 
 void mem_plus(Widget,void *d)
 {
+	Affichage *result=static_cast<Affichage*>(d);
+	char* control=GetStringEntry(result->_affichage);
+	if(isdigit(control[0]))
+	{
+		result->set_memory(control);
 	
+	}
+	else
+	{
+		WindowError("Erreur, Saisie imcompatible dans la memoire",d);
+	}
 }
 void mem_r(Widget,void *d)
 {
-	
+	Affichage *result=static_cast<Affichage*>(d);
+	if(result->get_memory()!="")
+	{
+		
+		result->set_number("");
+		screen(d,result->get_memory());
+	}
+	else
+	{
+		WindowError("Erreur, La memoire est vide",d);
+	}
 }
 void mem_c(Widget,void *d)
-{
-	
+{	
+	Affichage *result=static_cast<Affichage*>(d);
+	result->reset_memory();
 }
 void d1(Widget,void *d)
 {
+	Affichage *result=static_cast<Affichage*>(d);
+	string buf= result->get_number();
+	if(buf!="")
+	{
+		buf.pop_back();
+	}
 	
+	result->set_number(buf);
+	screen(d,"");
 }
+
 void c1(Widget,void *d)
 {
-	
+	Affichage *result=static_cast<Affichage*>(d);
+	result->set_number("");
+	result->set_operateur("");
+	screen(d,"");
 }

@@ -13,6 +13,7 @@ class Affichage
 	double _total;
 	string _operateur;
 	string _number;	// Stock le nombre pour l'affichage tant qu'il n'y a pas eu de saisie sur entrée
+	string _memory;
 
 public:
 	Widget _affichage;
@@ -27,6 +28,10 @@ public:
 	void set_number(string number);
 	bool empty();
 	int sizeArg();
+	string get_memory();
+	void set_memory(string memory);
+	void reset_memory();
+
 	int flag_enter;
 	int flag_err;
 };
