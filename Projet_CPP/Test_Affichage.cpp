@@ -112,3 +112,20 @@ TEST_CASE("Test du carré")
   operation(&resultat,"²");
   CHECK(resultat.get_total()==25);
 }
+
+TEST_CASE("Test pas d'opérateur")
+ {
+  Affichage resultat;
+  resultat.set_arg(5);
+  resultat.set_arg(3);
+  resultat.set_arg(4);
+  CHECK(resultat.flag_err==1); //Ca renvoi rien
+ }
+
+TEST_CASE("Test pas de chiffre")
+ {
+  Affichage resultat;
+  operation(&resultat,"*");
+  CHECK(resultat.flag_err==1); //Ca renvoi rien
+  CHECK(resultat.get_total()==0); // Ca renvoi rien
+ }
