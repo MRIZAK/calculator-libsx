@@ -71,3 +71,11 @@ using namespace std;
 	{
 		_arg.emptyPile();
 	}
+	void Affichage::set_rappel(string last)
+	{
+		_rappel=last;
+	}
+	string Affichage::get_rappel()
+	{
+		return _rappel;
+	}

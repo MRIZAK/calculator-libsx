@@ -14,9 +14,11 @@ class Affichage
 	string _operateur;
 	string _number;	// Stock le nombre pour l'affichage tant qu'il n'y a pas eu de saisie sur entrée
 	string _memory;
+	string _rappel;
 
 public:
 	Widget _affichage;
+	Widget _last;
 	Affichage();
 	double get_arg();
 	double get_total();
@@ -32,6 +34,8 @@ public:
 	void set_memory(string memory);
 	void reset_memory();
 	void reset_pile();
+	void set_rappel(string last);
+	string get_rappel();
 
 	int flag_enter;
 	int flag_err;
