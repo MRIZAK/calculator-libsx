@@ -86,7 +86,7 @@ void operation(void *d,string ope)
 						}
 						else 
 							{
-								WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+								WindowError("Pas assez d'operandes en memoire (minimum 2 requises)",d);
 								result->flag_err=1;
 								return;
 							}
@@ -101,7 +101,7 @@ void operation(void *d,string ope)
 						}
 						else 
 							{
-								WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+								WindowError("Pas assez d'operandes en memoire (minimum 2 requises)",d);
 								result->flag_err=1;
 								return;
 							}
@@ -115,7 +115,7 @@ void operation(void *d,string ope)
 						}
 						else 
 							{
-								WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+								WindowError("Pas assez d'operandes en memoire (minimum 2 requises)",d);
 								result->flag_err=1;
 								return;
 							}
@@ -129,7 +129,7 @@ void operation(void *d,string ope)
 						}
 						else 
 							{
-								WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+								WindowError("Pas assez d'operandes en memoire (minimum 2 requises)",d);
 								result->flag_err=1;
 								return;
 							}
@@ -144,7 +144,7 @@ void operation(void *d,string ope)
 						}
 						else 
 						{
-							WindowError("Pas assez d'operande en memoire (minimum 2 requis)",d);
+							WindowError("Pas assez d'operandes en memoire (minimum 2 requises)",d);
 							result->flag_err=1;
 							return;
 						}
@@ -226,7 +226,7 @@ void enter(Widget,void *d)
 				return;
 			}
 			control[0]='K';		//Si un des caractères n'est pas numérique, alors kill cette ligne avec affichage fenêtre d'erreur
-			WindowError("Merci de ne pas saisir de caracteres non numerique",d);
+			WindowError("Merci de ne pas saisir de caracteres non numeriques",d);
 			break;	
 		}
 	}
