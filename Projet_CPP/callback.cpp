@@ -55,7 +55,7 @@ void screen(void *d,string id)
 void operation(void *d,string ope)
 {
 	Affichage *result=static_cast<Affichage*>(d);
-
+	string doubleToString = {0};
 	double arg1=0,arg2=0;
 
 	map<string,int> operateur;
@@ -157,9 +157,15 @@ void operation(void *d,string ope)
 							return;
 			}
 	result->flag_ope=1;
-	screen(d,to_string(result->get_total()));
+	doubleToString =to_string(result->get_total());
+	while( 	(doubleToString.find(".")!=string::npos   && doubleToString.substr( doubleToString.length() - 1, 1) == "0")
+			|| doubleToString.substr( doubleToString.length() - 1, 1) == ".")
+		{
+    		doubleToString.pop_back();
+		}
+	screen(d,doubleToString);
 
-	result->set_rappel(to_string(result->get_total()));
+	result->set_rappel(doubleToString);
 	SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
 
 	}
