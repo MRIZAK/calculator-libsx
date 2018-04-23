@@ -158,6 +158,10 @@ void operation(void *d,string ope)
 			}
 	result->flag_ope=1;
 	screen(d,to_string(result->get_total()));
+
+	result->set_rappel(to_string(result->get_total()));
+	SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
+
 	}
 	else WindowError("Pas d'operande en memoire! Operation annulee",d);
 }
@@ -226,8 +230,14 @@ void enter(Widget,void *d)
 			break;	
 		}
 	}
-	if(control[0]!='K')
+	if(control[0]!='K' and temp!="")
 	{
+		if(result->get_rappel()=="")
+		{
+			result->set_rappel(temp);
+		}
+		else result->set_rappel(result->get_rappel()+" / "+temp);
+		SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
 		result->set_arg(stod(temp));
 	}
 	
@@ -253,6 +263,7 @@ void virg(Widget,void *d)
 
 			result->set_number("0.");
 		 }
+
 }
 
 
@@ -391,4 +402,6 @@ void c1(Widget,void *d)
 	result->set_operateur("");
 	result->reset_pile();
 	screen(d,"");
+	result->set_rappel("");
+	SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
 }
