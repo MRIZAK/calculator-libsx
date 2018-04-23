@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Catch.hpp"
 #include "Affichage.hpp"
-#include "callback.cpp"
+#include "callback.hpp"
 
 using namespace std;
 
@@ -47,6 +47,7 @@ operation(&resultat,"+");
 operation(&resultat,"/");
 operation(&resultat,"*");
 CHECK(resultat.get_total()==7.5);
+CHECK(resultat.get_total()==5.5);
 }
 
 TEST_CASE("Test division par 0")
@@ -82,7 +83,7 @@ TEST_CASE("Test trop d'opérateur")
  operation(&resultat,"+");
  operation(&resultat,"-");
  CHECK(resultat.flag_err==1); // S'il ne fait pas le calcul
- CHECK(resultat.get_total()==4); // Il retourne 3-4+5
+ CHECK(resultat.get_total()==17); // Il retourne 3*4+5
  }
 
 TEST_CASE("Test pas assez d'opérateur")
@@ -100,10 +101,8 @@ TEST_CASE("Test du pourcentage")
  {
   Affichage resultat;
   resultat.set_arg(5);
-  resultat.set_arg(10);
-  operation(&resultat,"*");
   operation(&resultat,"%");
-  CHECK(resultat.get_total()==0.50);
+  CHECK(resultat.get_total()==0.05);
 }
 
 TEST_CASE("Test du carré")
