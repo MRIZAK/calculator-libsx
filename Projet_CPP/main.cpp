@@ -8,7 +8,7 @@ using namespace std;
 void init_display(int argc, char **argv, void *d)
 {
 	Affichage *result=static_cast<Affichage*>(d);
-
+	result->_last=MakeTextWidget(nullptr,false,false,100,50);
 
 ///////Création des Widgets "numéros"///////
 	
@@ -34,6 +34,7 @@ void init_display(int argc, char **argv, void *d)
 ///////Association des Widgets avec les callbacks///////
 
 	result->_affichage=MakeStringEntry(nullptr,135,nullptr,nullptr);
+
 
 	wneuf=MakeButton(const_cast<char*>("9"),neuf,d);
 	whuit=MakeButton(const_cast<char*>("8"),huit,d);
@@ -68,6 +69,8 @@ void init_display(int argc, char **argv, void *d)
 	SetWidgetPos(wdiv,PLACE_RIGHT,wneuf,PLACE_UNDER,result->_affichage);
 	SetWidgetPos(wd1,PLACE_RIGHT,wdiv,PLACE_UNDER,result->_affichage);
 	SetWidgetPos(wmem_plus,PLACE_RIGHT,wd1,PLACE_UNDER,result->_affichage);
+	SetWidgetPos(result->_last,PLACE_RIGHT,wmem_plus,PLACE_UNDER,result->_affichage);
+	//SetWidgetPos(result->_last,PLACE_UNDER,result->_affichage,NO_CARE,NULL);
 
 
 	/* Deuxième ligne */	
