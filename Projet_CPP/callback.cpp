@@ -156,12 +156,50 @@ void operation(void *d,string ope)
 				default: 	WindowError("Erreur inattendue lors de la saisie de l'operateur...nous sommes desoles!",d);
 							return;
 			}
-	result->flag_ope=1;
-	screen(d,to_string(result->get_total()));
+		result->flag_ope=1;
+		screen(d,to_string(result->get_total()));
 
-	result->set_rappel(to_string(result->get_total()));
-	SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
+		// Met à jour l'affichage des opérandes présent dans le stack
+		
+		if(result->sizeArg()>1)
+		{
+			string str=result->get_rappel();
+			string key=" / ";
+			size_t found = str.rfind(key);
+			if (found!=std::string::npos)
+		    str.replace (found,str.back(),"");
+			found = str.rfind(key);
 
+
+			// On retire les décimales trop longues
+			string doubleToString = {0};
+			doubleToString =to_string(result->get_total());
+			while( 	(doubleToString.find(".")!=string::npos   && doubleToString.substr( doubleToString.length() - 1, 1) == "0")
+					|| doubleToString.substr( doubleToString.length() - 1, 1) == ".")
+				{
+		    		doubleToString.pop_back();
+				}
+
+		  	if (found!=std::string::npos)
+		    str.replace (found,str.back(),(" / "+doubleToString));
+			result->set_rappel(str);
+
+			SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
+		}
+		else // Si il n'y a plus qu'un élément dans le stack on ne met à jour que ce dernier
+		{
+			// On retire les décimales trop longues
+			string doubleToString = {0};
+			doubleToString =to_string(result->get_total());
+			while( 	(doubleToString.find(".")!=string::npos   && doubleToString.substr( doubleToString.length() - 1, 1) == "0")
+					|| doubleToString.substr( doubleToString.length() - 1, 1) == ".")
+				{
+		    		doubleToString.pop_back();
+				}
+
+			result->set_rappel(doubleToString);
+			SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
+		}
 	}
 	else WindowError("Pas d'operande en memoire! Operation annulee",d);
 }
