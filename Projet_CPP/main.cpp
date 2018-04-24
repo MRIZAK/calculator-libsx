@@ -116,5 +116,6 @@ int main(int argc, char **argv)
 
 	init_display(argc,argv,d);
 	MainLoop();
+	delete d;
 	return 0;
 }
