@@ -57,6 +57,7 @@ void operation(void *d,string ope)
 	Affichage *result=static_cast<Affichage*>(d);
 
 	double arg1=0,arg2=0;
+	int flag_maj=0;
 
 	map<string,int> operateur;
 	operateur["/"]=1;
@@ -82,6 +83,7 @@ void operation(void *d,string ope)
 							arg2=result->get_arg();
 							result->set_arg(arg2/arg1);
 							result->set_total(arg2/arg1);
+							flag_maj=1;
 							break;
 						}
 						else 
@@ -97,6 +99,7 @@ void operation(void *d,string ope)
 							arg2=result->get_arg();
 							result->set_arg(arg1*arg2);
 							result->set_total(arg2*arg1);
+							flag_maj=1;
 							break;
 						}
 						else 
@@ -111,6 +114,7 @@ void operation(void *d,string ope)
 							arg2=result->get_arg();
 							result->set_arg(arg2+arg1);
 							result->set_total(arg2+arg1);
+							flag_maj=1;
 							break;
 						}
 						else 
@@ -125,6 +129,7 @@ void operation(void *d,string ope)
 							arg2=result->get_arg();
 							result->set_arg(arg2-arg1);
 							result->set_total(arg2-arg1);
+							flag_maj=1;
 							break;
 						}
 						else 
@@ -140,6 +145,7 @@ void operation(void *d,string ope)
 							result->set_arg(arg2);
 							result->set_arg((arg1*100)/arg2);
 							result->set_total((arg1*100)/arg2);
+							flag_maj=1;
 							break;
 						}
 						else 
@@ -152,6 +158,7 @@ void operation(void *d,string ope)
 						arg1*=arg1;
 						result->set_arg(arg1);
 						result->set_total(arg1);
+						flag_maj=2;
 						break;
 				default: 	WindowError("Erreur inattendue lors de la saisie de l'operateur...nous sommes desoles!",d);
 							return;
@@ -159,9 +166,33 @@ void operation(void *d,string ope)
 		result->flag_ope=1;
 		screen(d,to_string(result->get_total()));
 
+		if(result->sizeArg()>1 and flag_maj==2) // Si il s'agit d'une opération "carré" et qu'il y a plus d'un argument dans le stack
+		{
+			string str=result->get_rappel();
+			string key=" / ";
+			size_t found = str.rfind(key);
+
+			// On retire les décimales trop longues
+			string doubleToString = {0};
+			doubleToString =to_string(result->get_total());
+			while( 	(doubleToString.find(".")!=string::npos   && doubleToString.substr( doubleToString.length() - 1, 1) == "0")
+					|| doubleToString.substr( doubleToString.length() - 1, 1) == ".")
+				{
+		    		doubleToString.pop_back();
+				}
+
+		  	if (found!=std::string::npos)
+		    str.replace (found,str.back(),(" / "+doubleToString));
+			result->set_rappel(str);
+
+			SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
+			flag_maj=0;
+		}
+
+
 		// Met à jour l'affichage des opérandes présent dans le stack
 		
-		if(result->sizeArg()>1)
+		if(flag_maj==1)
 		{
 			string str=result->get_rappel();
 			string key=" / ";
@@ -185,8 +216,9 @@ void operation(void *d,string ope)
 			result->set_rappel(str);
 
 			SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
+			flag_maj=0;
 		}
-		else // Si il n'y a plus qu'un élément dans le stack on ne met à jour que ce dernier
+		if(flag_maj==2 or result->sizeArg()==1) // Si il n'y a plus qu'un élément dans le stack on ne met à jour que ce dernier ou si il s'agit d'une opération "carré"
 		{
 			// On retire les décimales trop longues
 			string doubleToString = {0};
@@ -198,6 +230,7 @@ void operation(void *d,string ope)
 				}
 
 			result->set_rappel(doubleToString);
+			flag_maj=0;
 			SetTextWidgetText(result->_last,const_cast<char*>(result->get_rappel().c_str()),false);
 		}
 	}
