@@ -145,7 +145,7 @@ void operation(void *d,string ope)
 							result->set_arg(arg2);
 							result->set_arg((arg1*100)/arg2);
 							result->set_total((arg1*100)/arg2);
-							flag_maj=1;
+							flag_maj=2;
 							break;
 						}
 						else 
