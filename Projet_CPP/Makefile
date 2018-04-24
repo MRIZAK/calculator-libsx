@@ -6,9 +6,9 @@ OBJ = $(SRC:.cpp=.o)
 OBJ_TEST = $(SRC_TEST:.cpp=.o)
 
 all:
-	make main-calc
+	make Calculator
 
-main-calc: $(OBJ)
+Calculator: $(OBJ)
 	g++ -o $@ $^ -lsx
 
 test-calc: $(OBJ_TEST)
@@ -27,7 +27,7 @@ Test_Affichage.o: Test_Affichage.cpp Catch.hpp
 Test_Pile.o:Test_Pile.cpp Catch.hpp
 
 cleaner: clean
-	rm -f main-calc
+	rm -f Calculator
 	rm -f test-calc
 
 clean:
